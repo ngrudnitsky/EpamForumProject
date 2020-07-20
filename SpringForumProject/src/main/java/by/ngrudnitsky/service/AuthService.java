@@ -1,14 +1,16 @@
 package by.ngrudnitsky.service;
 
-import by.ngrudnitsky.dto.AuthenticationResponseDto;
-import by.ngrudnitsky.dto.RefreshTokenRequestDto;
+import by.ngrudnitsky.dto.*;
 import by.ngrudnitsky.entity.User;
 import by.ngrudnitsky.exeption.UserNotFoundException;
+import by.ngrudnitsky.exeption.UserServiceException;
 
 public interface AuthService {
-    public void verifyAccount(String token);
+    void verifyAccount(String token);
 
-    public User register(User user);
+    UserDto register(RegistrationDto registrationDto);
+
+    AuthenticationResponseDto login(AuthenticationRequestDto authenticationRequestDto) throws UserServiceException, UserNotFoundException;
 
     User getCurrentUser();
 

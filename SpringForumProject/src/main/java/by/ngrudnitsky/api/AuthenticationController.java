@@ -36,10 +36,8 @@ public class AuthenticationController {
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<UserDto> createUser(@RequestBody RegistrationDto regUserDto) {
-        //todo ref method
-        User user = regUserDto.toUser();
-        user = authService.register(user);
-        return new ResponseEntity<>(UserDto.fromUser(user), HttpStatus.CREATED);
+        UserDto user = authService.register(regUserDto);
+        return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
 
     @GetMapping("/accountVerification/{token}")
@@ -50,27 +48,13 @@ public class AuthenticationController {
 
     @PostMapping("/login")
     public ResponseEntity<AuthenticationResponseDto> login(@RequestBody AuthenticationRequestDto requestDto) {
-        //todo ref method
         try {
-            String username = requestDto.getUsername();
-            authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(username, requestDto.getPassword()));
-            User user = userService.findByUsername(username);
-            String token = jwtTokenProvider.createToken(username, user.getRoles());
-            AuthenticationResponseDto response = AuthenticationResponseDto.builder()
-                    .token(token)
-                    .refreshToken(refreshTokenService.generateRefreshToken().getToken())
-                    .username(username)
-                    .expiresAt(Instant.now().plusMillis(jwtTokenProvider.getValidityInMilliseconds()))
-                    .build();
+            AuthenticationResponseDto response = authService.login(requestDto);
             return new ResponseEntity<>(response, HttpStatus.OK);
-        } catch (AuthenticationException e) {
-            log.error("Invalid username or password");
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         } catch (UserNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } catch (UserServiceException e) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 

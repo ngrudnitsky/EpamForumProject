@@ -3,21 +3,25 @@ package by.ngrudnitsky.service.impl;
 import by.ngrudnitsky.data.RoleRepository;
 import by.ngrudnitsky.data.UserRepository;
 import by.ngrudnitsky.data.VerificationTokenRepository;
-import by.ngrudnitsky.dto.AuthenticationResponseDto;
-import by.ngrudnitsky.dto.RefreshTokenRequestDto;
+import by.ngrudnitsky.dto.*;
 import by.ngrudnitsky.entity.NotificationEmail;
 import by.ngrudnitsky.entity.Role;
 import by.ngrudnitsky.entity.User;
 import by.ngrudnitsky.entity.VerificationToken;
 import by.ngrudnitsky.exeption.AuthServiceException;
 import by.ngrudnitsky.exeption.UserNotFoundException;
+import by.ngrudnitsky.exeption.UserServiceException;
+import by.ngrudnitsky.mapper.UserMapper;
 import by.ngrudnitsky.security.jwt.JwtTokenProvider;
 import by.ngrudnitsky.security.jwt.JwtUser;
 import by.ngrudnitsky.service.AuthService;
 import by.ngrudnitsky.service.MailService;
 import by.ngrudnitsky.service.RefreshTokenService;
+import by.ngrudnitsky.service.UserService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -35,7 +39,9 @@ import java.util.UUID;
 @Slf4j
 @Transactional
 class AuthServiceImpl implements AuthService {
-
+    private final AuthenticationManager authenticationManager;
+    private final UserService userService;
+    private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
@@ -46,7 +52,8 @@ class AuthServiceImpl implements AuthService {
     private final JwtTokenProvider jwtTokenProvider;
 
     @Override
-    public User register(User user) {
+    public UserDto register(RegistrationDto registrationDto) {
+        User user = userMapper.mapFromRegistrationDto(registrationDto);
         Role roleUser = roleRepository.findByName("ROLE_USER");
         user.setRoles(List.of(roleUser));
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -58,7 +65,22 @@ class AuthServiceImpl implements AuthService {
                 user.getEmail(), mailContentBuilder.build(getEmailMessage(token))));
 
         log.info("IN register - user: {} successfully registered", registeredUser);
-        return registeredUser;
+        return userMapper.mapToDto(registeredUser);
+    }
+
+    @Override
+    public AuthenticationResponseDto login(AuthenticationRequestDto requestDto) throws UserServiceException, UserNotFoundException {
+        String username = requestDto.getUsername();
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(username, requestDto.getPassword()));
+        User user = userService.findByUsername(username);
+        String token = jwtTokenProvider.createToken(username, user.getRoles());
+        return AuthenticationResponseDto.builder()
+                .token(token)
+                .refreshToken(refreshTokenService.generateRefreshToken().getToken())
+                .username(username)
+                .expiresAt(Instant.now().plusMillis(jwtTokenProvider.getValidityInMilliseconds()))
+                .build();
     }
 
     private String getEmailMessage(String token) {

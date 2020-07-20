@@ -2,25 +2,18 @@ package by.ngrudnitsky.dto;
 
 import by.ngrudnitsky.entity.User;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
-@JsonIgnoreProperties(ignoreUnknown = true)
+@AllArgsConstructor
+@NoArgsConstructor
 public class UserDto {
     private Long id;
     private String username;
     private String firstName;
     private String lastName;
-
-    public User toUser(){
-        User user = new User();
-        user.setUserId(id);
-        user.setUsername(username);
-        user.setFirstName(firstName);
-        user.setLastName(lastName);
-
-        return user;
-    }
 
     public static UserDto fromUser(User user) {
         UserDto userDto = new UserDto();
@@ -28,8 +21,6 @@ public class UserDto {
         userDto.setUsername(user.getUsername());
         userDto.setFirstName(user.getFirstName());
         userDto.setLastName(user.getLastName());
-
         return userDto;
     }
-
 }
