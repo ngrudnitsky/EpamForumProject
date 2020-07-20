@@ -1,0 +1,26 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
+<!-- Header -->
+<header id="header">
+    <h1><a href="/do?command=main page&from=0&to=5">Forum project</a></h1>
+    <nav class="links">
+        <ul>
+        <c:choose>
+            <c:when test="${user!=null}">
+                <li><a href="do?command=profile">Profile</a></li>
+                <li><a href="do?command=writing">Write Post</a></li>
+                <c:choose>
+                    <c:when test="${admin==true}">
+                        <li><a href="do?command=edit post">Moderate</a></li>
+                    </c:when>
+                </c:choose>
+                <li><a href="do?command=log out">Log out</a></li>
+            </c:when>
+            <c:otherwise>
+                <li><a href="do?command=log in">Log In</a></li>
+                <li><a href="do?command=join">Sign up</a></li>
+            </c:otherwise>
+        </c:choose>
+        </ul>
+    </nav>
+</header>
