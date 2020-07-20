@@ -13,6 +13,7 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/api/v1/posts")
 @AllArgsConstructor
+@SuppressWarnings("unused")
 public class PostController {
     private final PostService postService;
 

@@ -14,6 +14,4 @@ public interface RequestPostMapper {
     @Mapping(target = "user", source = "user")
     @Mapping(target = "status", ignore = true)
     Post map(PostDto postDto, User user);
-
-    PostDto mapToDto(Post post);
 }

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(value = "/api/v1/votes")
 @AllArgsConstructor
+@SuppressWarnings("unused")
 public class VoteController {
     private final VoteService voteService;
 
@@ -26,7 +27,6 @@ public class VoteController {
         } catch (PostNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } catch (VoteServiceException e) {
-            //todo ref
             return new ResponseEntity<>(HttpStatus.OK);
         }
     }

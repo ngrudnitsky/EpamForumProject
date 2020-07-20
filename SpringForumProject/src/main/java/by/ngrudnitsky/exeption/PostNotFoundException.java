@@ -1,5 +1,6 @@
 package by.ngrudnitsky.exeption;
 
+@SuppressWarnings("unused")
 public class PostNotFoundException extends Exception {
     public PostNotFoundException() {
     }

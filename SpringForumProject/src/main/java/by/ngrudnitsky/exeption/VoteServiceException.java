@@ -1,5 +1,6 @@
 package by.ngrudnitsky.exeption;
 
+@SuppressWarnings("unused")
 public class VoteServiceException extends Exception {
     public VoteServiceException() {
     }

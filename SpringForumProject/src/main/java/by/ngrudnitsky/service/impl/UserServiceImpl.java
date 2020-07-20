@@ -29,8 +29,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findByUsername(String username) throws UserServiceException, UserNotFoundException {
-        checkIfValueIsNull(username, "IN UserServiceImpl.findByUsername - Null userName was found");
+    public User findByUsername(String username) throws UserNotFoundException {
         User result = userRepository.findByUsername(username).orElse(null);
         if (result == null) {
             String errorMessage = String.format(
@@ -43,8 +42,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findById(Long id) throws UserServiceException, UserNotFoundException {
-        checkIfValueIsNull(id, "IN UserServiceImpl.findById - Null id was found");
+    public User findById(Long id) throws UserNotFoundException {
         User result = userRepository.findById(id).orElse(null);
         if (result == null) {
             String errorMessage = String.format(
@@ -57,8 +55,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User deleteById(Long id) throws UserServiceException, UserNotFoundException {
-        checkIfValueIsNull(id, "IN UserServiceImpl.deleteById - Null id was found");
+    public User deleteById(Long id) throws UserNotFoundException {
         User user = userRepository.findById(id).orElse(null);
         if (user == null) {
             String errorMessage = String.format(
@@ -71,12 +68,5 @@ public class UserServiceImpl implements UserService {
         User deletedUser = userRepository.save(user);
         log.info("IN delete - user with id: {} successfully deleted", id);
         return deletedUser;
-    }
-
-    private void checkIfValueIsNull(Object value, String errorMessage) throws UserServiceException {
-        if (value == null) {
-            log.error(errorMessage);
-            throw new UserServiceException(errorMessage);
-        }
     }
 }

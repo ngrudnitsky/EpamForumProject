@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.time.Instant;
 import java.util.Collection;
 
+@SuppressWarnings("unused")
 public class JwtUser implements UserDetails {
 
     private final Long id;

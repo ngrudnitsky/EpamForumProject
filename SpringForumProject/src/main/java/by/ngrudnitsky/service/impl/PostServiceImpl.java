@@ -14,6 +14,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Date;
+import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -32,16 +34,15 @@ public class PostServiceImpl implements PostService {
         Post post = postMapper.map(postDto, authService.getCurrentUser());
         Post createdPost = postRepository.save(post);
         log.info("IN create - post: {} successfully registered", createdPost);
-        return postMapper.mapToDto(post);
+        return postMapper.mapToPostDto(post);
     }
 
     @Override
-    public Post updatePost(Post post) throws PostServiceException {
-//        checkIfValueIsNull(post, "IN PostServiceImpl.updatePost - post is null");
-//        post.setUpdated(Instant.now());
-//        postRepository.update(post.getTitle(), post.getPreview(), post.getContent(),
-//                post.getStatus(), post.getUpdated(), post.getPostId());
-//        log.info("IN PostServiceImpl.updatePost - post: #{} successfully registered", post.getPostId());
+    public Post updatePost(Post post) {
+        post.setUpdated(Instant.now());
+        postRepository.update(post.getTitle(), post.getPreview(), post.getContent(),
+                post.getStatus(), new Date(post.getUpdated().getEpochSecond()), post.getPostId());
+        log.info("IN PostServiceImpl.updatePost - post: #{} successfully registered", post.getPostId());
         return post;
     }
 
@@ -51,7 +52,7 @@ public class PostServiceImpl implements PostService {
         List<Post> posts = postRepository.findAll();
         log.info("IN getAll - {} posts found", posts.size());
         return posts.stream()
-                .map(postMapper::mapToDto)
+                .map(postMapper::mapToPostDto)
                 .collect(Collectors.toList());
     }
 
@@ -66,7 +67,7 @@ public class PostServiceImpl implements PostService {
             throw new PostNotFoundException(errorMessage);
         }
         log.info("IN findById - post: {} found by id: {}", post, id);
-        return postMapper.mapToDto(post);
+        return postMapper.mapToPostDto(post);
     }
 
     @Override

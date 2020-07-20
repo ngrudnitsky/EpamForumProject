@@ -10,7 +10,6 @@ import by.ngrudnitsky.entity.User;
 import by.ngrudnitsky.entity.VerificationToken;
 import by.ngrudnitsky.exeption.AuthServiceException;
 import by.ngrudnitsky.exeption.UserNotFoundException;
-import by.ngrudnitsky.exeption.UserServiceException;
 import by.ngrudnitsky.mapper.UserMapper;
 import by.ngrudnitsky.security.jwt.JwtTokenProvider;
 import by.ngrudnitsky.security.jwt.JwtUser;
@@ -65,11 +64,11 @@ class AuthServiceImpl implements AuthService {
                 user.getEmail(), mailContentBuilder.build(getEmailMessage(token))));
 
         log.info("IN register - user: {} successfully registered", registeredUser);
-        return userMapper.mapToDto(registeredUser);
+        return userMapper.mapToUserDto(registeredUser);
     }
 
     @Override
-    public AuthenticationResponseDto login(AuthenticationRequestDto requestDto) throws UserServiceException, UserNotFoundException {
+    public AuthenticationResponseDto login(AuthenticationRequestDto requestDto) throws UserNotFoundException {
         String username = requestDto.getUsername();
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(username, requestDto.getPassword()));

@@ -1,6 +1,7 @@
 package by.ngrudnitsky.mapper;
 
 import by.ngrudnitsky.data.CommentRepository;
+import by.ngrudnitsky.dto.AdminPostDto;
 import by.ngrudnitsky.dto.PostDto;
 import by.ngrudnitsky.entity.Post;
 import by.ngrudnitsky.entity.User;
@@ -23,7 +24,11 @@ public abstract class PostMapper {
 
     @Mapping(target = "commentCount", expression = "java(commentCount(post))")
     @Mapping(target = "duration", expression = "java(getDuration(post))")
-    public abstract PostDto mapToDto(Post post);
+    public abstract PostDto mapToPostDto(Post post);
+
+    @Mapping(target = "commentCount", expression = "java(commentCount(post))")
+    @Mapping(target = "duration", expression = "java(getDuration(post))")
+    public abstract AdminPostDto mapToAdminPostDto(Post post);
 
     Integer commentCount(Post post) {
         return commentRepository.findByPost(post).size();

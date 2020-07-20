@@ -7,6 +7,7 @@ import by.ngrudnitsky.exeption.PostServiceException;
 
 import java.util.List;
 
+@SuppressWarnings("unused")
 public interface PostService {
 
     PostDto create(PostDto postDto);

@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
 
 @Component
 @Data
+@SuppressWarnings("unused")
 public class JwtTokenProvider {
 
     @Value("${jwt.token.secret}")

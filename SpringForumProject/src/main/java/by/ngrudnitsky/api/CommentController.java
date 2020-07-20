@@ -14,6 +14,7 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/api/v1/comments")
 @AllArgsConstructor
+@SuppressWarnings("unused")
 public class CommentController {
     private final CommentService commentService;
 

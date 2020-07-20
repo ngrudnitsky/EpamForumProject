@@ -12,6 +12,7 @@ import java.time.Instant;
 
 @MappedSuperclass
 @Data
+@SuppressWarnings("unused")
 abstract class BaseEntity {
 
     @CreatedDate

@@ -1,5 +1,6 @@
 package by.ngrudnitsky.exeption;
 
+@SuppressWarnings("unused")
 public class PostServiceException extends Exception {
     public PostServiceException() {
     }

@@ -17,7 +17,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 @NoArgsConstructor
 @Entity
 @Table(name = "token")
-public class VerificationToken extends BaseEntity{
+public class VerificationToken extends BaseEntity {
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private Long id;

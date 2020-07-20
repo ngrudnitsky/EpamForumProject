@@ -2,6 +2,7 @@ package by.ngrudnitsky.exeption;
 
 import org.springframework.security.core.AuthenticationException;
 
+@SuppressWarnings("unused")
 public class AuthServiceException extends AuthenticationException {
     public AuthServiceException(String msg, Throwable t) {
         super(msg, t);

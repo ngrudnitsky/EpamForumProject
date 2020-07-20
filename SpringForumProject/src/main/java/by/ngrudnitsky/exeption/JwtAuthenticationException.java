@@ -2,6 +2,7 @@ package by.ngrudnitsky.exeption;
 
 import org.springframework.security.core.AuthenticationException;
 
+@SuppressWarnings("unused")
 public class JwtAuthenticationException extends AuthenticationException {
     public JwtAuthenticationException(String msg, Throwable t) {
         super(msg, t);
