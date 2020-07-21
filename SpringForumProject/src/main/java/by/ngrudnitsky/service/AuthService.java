@@ -2,7 +2,7 @@ package by.ngrudnitsky.service;
 
 import by.ngrudnitsky.dto.*;
 import by.ngrudnitsky.entity.User;
-import by.ngrudnitsky.exeption.UserNotFoundException;
+import by.ngrudnitsky.exception.UserNotFoundException;
 
 public interface AuthService {
     void verifyAccount(String token);

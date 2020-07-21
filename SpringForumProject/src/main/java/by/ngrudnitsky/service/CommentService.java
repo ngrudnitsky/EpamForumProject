@@ -1,8 +1,8 @@
 package by.ngrudnitsky.service;
 
 import by.ngrudnitsky.dto.CommentDto;
-import by.ngrudnitsky.exeption.PostNotFoundException;
-import by.ngrudnitsky.exeption.UserNotFoundException;
+import by.ngrudnitsky.exception.PostNotFoundException;
+import by.ngrudnitsky.exception.UserNotFoundException;
 
 import java.util.List;
 

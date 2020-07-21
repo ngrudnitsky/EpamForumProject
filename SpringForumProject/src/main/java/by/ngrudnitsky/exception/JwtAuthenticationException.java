@@ -1,4 +1,4 @@
-package by.ngrudnitsky.exeption;
+package by.ngrudnitsky.exception;
 
 import org.springframework.security.core.AuthenticationException;
 

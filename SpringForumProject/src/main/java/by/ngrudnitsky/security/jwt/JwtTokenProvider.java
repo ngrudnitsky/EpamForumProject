@@ -1,7 +1,7 @@
 package by.ngrudnitsky.security.jwt;
 
 import by.ngrudnitsky.entity.Role;
-import by.ngrudnitsky.exeption.JwtAuthenticationException;
+import by.ngrudnitsky.exception.JwtAuthenticationException;
 import io.jsonwebtoken.*;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;

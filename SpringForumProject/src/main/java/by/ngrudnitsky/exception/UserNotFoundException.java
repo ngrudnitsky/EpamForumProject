@@ -1,4 +1,4 @@
-package by.ngrudnitsky.exeption;
+package by.ngrudnitsky.exception;
 
 public class UserNotFoundException extends Exception {
     public UserNotFoundException() {

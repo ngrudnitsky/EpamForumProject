@@ -1,8 +1,8 @@
 package by.ngrudnitsky.api;
 
 import by.ngrudnitsky.dto.CommentDto;
-import by.ngrudnitsky.exeption.PostNotFoundException;
-import by.ngrudnitsky.exeption.UserNotFoundException;
+import by.ngrudnitsky.exception.PostNotFoundException;
+import by.ngrudnitsky.exception.UserNotFoundException;
 import by.ngrudnitsky.service.CommentService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;

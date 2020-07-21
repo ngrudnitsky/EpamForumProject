@@ -2,7 +2,7 @@ package by.ngrudnitsky.service.impl;
 
 import by.ngrudnitsky.data.RefreshTokenRepository;
 import by.ngrudnitsky.entity.RefreshToken;
-import by.ngrudnitsky.exeption.RefreshTokenServiceException;
+import by.ngrudnitsky.exception.RefreshTokenServiceException;
 import by.ngrudnitsky.service.RefreshTokenService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

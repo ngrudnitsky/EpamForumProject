@@ -4,8 +4,7 @@ import by.ngrudnitsky.data.PostRepository;
 import by.ngrudnitsky.dto.PostDto;
 import by.ngrudnitsky.entity.Post;
 import by.ngrudnitsky.entity.Status;
-import by.ngrudnitsky.exeption.PostNotFoundException;
-import by.ngrudnitsky.exeption.PostServiceException;
+import by.ngrudnitsky.exception.PostNotFoundException;
 import by.ngrudnitsky.mapper.PostMapper;
 import by.ngrudnitsky.service.AuthService;
 import by.ngrudnitsky.service.PostService;
@@ -15,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
-import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;

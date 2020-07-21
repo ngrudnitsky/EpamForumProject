@@ -1,7 +1,7 @@
 package by.ngrudnitsky.service.impl;
 
 import by.ngrudnitsky.entity.NotificationEmail;
-import by.ngrudnitsky.exeption.EmailServiceException;
+import by.ngrudnitsky.exception.EmailServiceException;
 import by.ngrudnitsky.service.MailService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
