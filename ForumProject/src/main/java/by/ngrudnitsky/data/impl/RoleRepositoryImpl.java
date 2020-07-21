@@ -4,8 +4,6 @@ import by.ngrudnitsky.data.RoleRepository;
 import by.ngrudnitsky.entity.Role;
 import by.ngrudnitsky.entity.Status;
 import by.ngrudnitsky.exception.RoleRepositoryException;
-import by.ngrudnitsky.util.ConnectionPool;
-import by.ngrudnitsky.util.CustomConnectionPool;
 import org.apache.commons.lang3.EnumUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,14 +15,15 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static by.ngrudnitsky.util.ConnectionPool.getConnection;
+import static by.ngrudnitsky.util.ConnectionPool.releaseConnection;
+
 public class RoleRepositoryImpl implements RoleRepository {
     private final Logger log = LoggerFactory.getLogger(RoleRepositoryImpl.class);
-    private final ConnectionPool connectionPool = CustomConnectionPool
-            .getConnectionPool("jdbc:mysql://localhost:3306/mydb?serverTimezone=UTC", "root", "root");
-
+    
     @Override
     public Role findByName(String roleName) throws RoleRepositoryException {
-        Connection connection = connectionPool.getConnection();
+        Connection connection = getConnection();
         String findByNameQuery = "SELECT * FROM roles WHERE name = ?";
         String errorMessage = "IN RoleRepositoryImpl.findByName failed to find role by name %s";
         Role role = new Role();
@@ -44,7 +43,7 @@ public class RoleRepositoryImpl implements RoleRepository {
             log.error(errorMessage);
             throw new RoleRepositoryException(errorMessage, e);
         } finally {
-            connectionPool.releaseConnection(connection);
+            releaseConnection(connection);
         }
         log.error(errorMessage);
         throw new RoleRepositoryException(errorMessage);
@@ -53,7 +52,7 @@ public class RoleRepositoryImpl implements RoleRepository {
     //todo List<Integer>
     @Override
     public List<String> findAllUserRoles(Integer userId) throws RoleRepositoryException {
-        Connection connection = connectionPool.getConnection();
+        Connection connection = getConnection();
         String errorMessage = String.format(
                 "IN RoleRepositoryImpl.findAllUserRoles failed to find all roles of %s user.", userId);
         try {
@@ -74,13 +73,13 @@ public class RoleRepositoryImpl implements RoleRepository {
             log.error(errorMessage);
             throw new RoleRepositoryException(errorMessage, e);
         } finally {
-            connectionPool.releaseConnection(connection);
+            releaseConnection(connection);
         }
     }
 
     @Override
     public void setRoleUser(Integer userId) throws RoleRepositoryException {
-        Connection connection = connectionPool.getConnection();
+        Connection connection = getConnection();
         try {
             String saveUserRoleQuery = "INSERT INTO users_has_roles(users_id, roles_id)VALUES(?,1)";
             PreparedStatement preparedStatement = connection.prepareStatement(saveUserRoleQuery);
@@ -92,7 +91,7 @@ public class RoleRepositoryImpl implements RoleRepository {
             log.error(errorMessage);
             throw new RoleRepositoryException(errorMessage, e);
         } finally {
-            connectionPool.releaseConnection(connection);
+            releaseConnection(connection);
         }
     }
 }
