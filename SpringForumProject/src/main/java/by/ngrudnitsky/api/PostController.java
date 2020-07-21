@@ -1,7 +1,7 @@
 package by.ngrudnitsky.api;
 
 import by.ngrudnitsky.dto.PostDto;
-import by.ngrudnitsky.exeption.PostNotFoundException;
+import by.ngrudnitsky.exception.PostNotFoundException;
 import by.ngrudnitsky.service.PostService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;

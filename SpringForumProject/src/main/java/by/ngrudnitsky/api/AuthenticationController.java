@@ -1,8 +1,7 @@
 package by.ngrudnitsky.api;
 
 import by.ngrudnitsky.dto.*;
-import by.ngrudnitsky.exeption.UserNotFoundException;
-import by.ngrudnitsky.exeption.UserServiceException;
+import by.ngrudnitsky.exception.UserNotFoundException;
 import by.ngrudnitsky.service.AuthService;
 import by.ngrudnitsky.service.RefreshTokenService;
 import lombok.AllArgsConstructor;

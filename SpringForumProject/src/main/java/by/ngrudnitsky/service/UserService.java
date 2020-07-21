@@ -1,9 +1,7 @@
 package by.ngrudnitsky.service;
 
-import by.ngrudnitsky.dto.UserDto;
 import by.ngrudnitsky.entity.User;
-import by.ngrudnitsky.exeption.UserNotFoundException;
-import by.ngrudnitsky.exeption.UserServiceException;
+import by.ngrudnitsky.exception.UserNotFoundException;
 
 import java.util.List;
 

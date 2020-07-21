@@ -2,8 +2,8 @@ package by.ngrudnitsky.service;
 
 import by.ngrudnitsky.dto.PostDto;
 import by.ngrudnitsky.entity.Post;
-import by.ngrudnitsky.exeption.PostNotFoundException;
-import by.ngrudnitsky.exeption.PostServiceException;
+import by.ngrudnitsky.exception.PostNotFoundException;
+import by.ngrudnitsky.exception.PostServiceException;
 
 import java.util.List;
 

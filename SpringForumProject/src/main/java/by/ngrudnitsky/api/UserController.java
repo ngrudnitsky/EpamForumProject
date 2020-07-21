@@ -2,8 +2,7 @@ package by.ngrudnitsky.api;
 
 import by.ngrudnitsky.dto.UserDto;
 import by.ngrudnitsky.entity.User;
-import by.ngrudnitsky.exeption.UserNotFoundException;
-import by.ngrudnitsky.exeption.UserServiceException;
+import by.ngrudnitsky.exception.UserNotFoundException;
 import by.ngrudnitsky.mapper.UserMapper;
 import by.ngrudnitsky.service.UserService;
 import lombok.AllArgsConstructor;

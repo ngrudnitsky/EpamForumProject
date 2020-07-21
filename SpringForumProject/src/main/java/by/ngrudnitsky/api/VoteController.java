@@ -1,8 +1,8 @@
 package by.ngrudnitsky.api;
 
 import by.ngrudnitsky.dto.VoteDto;
-import by.ngrudnitsky.exeption.PostNotFoundException;
-import by.ngrudnitsky.exeption.VoteServiceException;
+import by.ngrudnitsky.exception.PostNotFoundException;
+import by.ngrudnitsky.exception.VoteServiceException;
 import by.ngrudnitsky.service.VoteService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;

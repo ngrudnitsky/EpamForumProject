@@ -1,8 +1,7 @@
 package by.ngrudnitsky.security;
 
 import by.ngrudnitsky.entity.User;
-import by.ngrudnitsky.exeption.UserNotFoundException;
-import by.ngrudnitsky.exeption.UserServiceException;
+import by.ngrudnitsky.exception.UserNotFoundException;
 import by.ngrudnitsky.security.jwt.JwtUser;
 import by.ngrudnitsky.security.jwt.JwtUserFactory;
 import by.ngrudnitsky.service.UserService;
