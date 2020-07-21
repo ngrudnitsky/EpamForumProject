@@ -4,8 +4,6 @@ import by.ngrudnitsky.data.PostRepository;
 import by.ngrudnitsky.entity.Post;
 import by.ngrudnitsky.entity.Status;
 import by.ngrudnitsky.exception.PostRepositoryException;
-import by.ngrudnitsky.util.ConnectionPool;
-import by.ngrudnitsky.util.CustomConnectionPool;
 import org.apache.commons.lang3.EnumUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,15 +12,15 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static by.ngrudnitsky.util.ConnectionPool.getConnection;
+import static by.ngrudnitsky.util.ConnectionPool.releaseConnection;
+
 public class PostRepositoryImpl implements PostRepository {
     private final Logger log = LoggerFactory.getLogger(PostRepositoryImpl.class);
-    private final ConnectionPool connectionPool = CustomConnectionPool
-            .getConnectionPool("jdbc:mysql://localhost:3306/mydb?serverTimezone=UTC", "root", "root");
-
 
     @Override
     public Post findById(Integer id) throws PostRepositoryException {
-        Connection connection = connectionPool.getConnection();
+        Connection connection = getConnection();
         String findByIdQuery = "SELECT * FROM posts WHERE id = ?";
         String errorMessage = String.format("IN PostRepositoryImpl.findById failed to find post by id %d", id);
         try {
@@ -45,7 +43,7 @@ public class PostRepositoryImpl implements PostRepository {
             log.error(errorMessage);
             throw new PostRepositoryException(errorMessage, e);
         } finally {
-            connectionPool.releaseConnection(connection);
+            releaseConnection(connection);
         }
         log.error(errorMessage);
         throw new PostRepositoryException(errorMessage);
@@ -53,7 +51,7 @@ public class PostRepositoryImpl implements PostRepository {
 
     @Override
     public Post update(Post post) throws PostRepositoryException {
-        Connection connection = connectionPool.getConnection();
+        Connection connection = getConnection();
         try {
             String updatePostQuery = "UPDATE posts SET title = ?, preview = ?, content = ?, status = ?, " +
                     "updatedAt= ? WHERE id = ?";
@@ -72,13 +70,13 @@ public class PostRepositoryImpl implements PostRepository {
             log.error(errorMessage);
             throw new PostRepositoryException(errorMessage, e);
         } finally {
-            connectionPool.releaseConnection(connection);
+            releaseConnection(connection);
         }
     }
 
     @Override
     public Post deleteById(Integer id) throws PostRepositoryException {
-        Connection connection = connectionPool.getConnection();
+        Connection connection = getConnection();
         try {
             String updateUserQuery = "UPDATE posts SET status = ?, updatedAt = ? WHERE id = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(updateUserQuery);
@@ -93,13 +91,13 @@ public class PostRepositoryImpl implements PostRepository {
             log.error(errorMessage);
             throw new PostRepositoryException(errorMessage, e);
         } finally {
-            connectionPool.releaseConnection(connection);
+            releaseConnection(connection);
         }
     }
 
     @Override
     public Post create(Post post) throws PostRepositoryException {
-        Connection connection = connectionPool.getConnection();
+        Connection connection = getConnection();
         try {
             String createPostQuery = "INSERT INTO posts(title, preview, content, status," +
                     "createdAt, updatedAt, users_id)VALUES(?,?,?,?,?,?,?)";
@@ -120,13 +118,13 @@ public class PostRepositoryImpl implements PostRepository {
             log.error(errorMessage);
             throw new PostRepositoryException(errorMessage, e);
         } finally {
-            connectionPool.releaseConnection(connection);
+            releaseConnection(connection);
         }
     }
 
     @Override
     public List<Post> findAll() throws PostRepositoryException {
-        Connection connection = connectionPool.getConnection();
+        Connection connection = getConnection();
         try {
             String findAllPostsQuery = "SELECT id FROM posts";
             List<Post> posts = new ArrayList<>();
@@ -140,13 +138,13 @@ public class PostRepositoryImpl implements PostRepository {
             log.error(errorMessage);
             throw new PostRepositoryException(errorMessage, e);
         } finally {
-            connectionPool.releaseConnection(connection);
+            releaseConnection(connection);
         }
     }
 
     @Override
     public List<Post> findFromTo(Integer from, Integer to) throws PostRepositoryException {
-        Connection connection = connectionPool.getConnection();
+        Connection connection = getConnection();
         try {
             String findAllPostsQuery = "SELECT id FROM posts WHERE status = 'ACTIVE' LIMIT ?, ?";
             PreparedStatement preparedStatement = connection.prepareStatement(findAllPostsQuery);
@@ -163,13 +161,13 @@ public class PostRepositoryImpl implements PostRepository {
             log.error(errorMessage);
             throw new PostRepositoryException(errorMessage, e);
         } finally {
-            connectionPool.releaseConnection(connection);
+            releaseConnection(connection);
         }
     }
 
     @Override
     public Integer getLastId() throws PostRepositoryException {
-        Connection connection = connectionPool.getConnection();
+        Connection connection = getConnection();
         try {
             String getLastId = "SELECT LAST_INSERT_ID()";
             ResultSet resultSet = connection.createStatement().executeQuery(getLastId);
@@ -181,7 +179,7 @@ public class PostRepositoryImpl implements PostRepository {
             log.error(errorMessage);
             throw new PostRepositoryException(errorMessage, e);
         } finally {
-            connectionPool.releaseConnection(connection);
+            releaseConnection(connection);
         }
         return -1;
     }

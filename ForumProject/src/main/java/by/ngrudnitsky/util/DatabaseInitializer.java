@@ -1,47 +1,38 @@
 package by.ngrudnitsky.util;
 
+import by.ngrudnitsky.exception.ConnectionException;
+
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.HashMap;
+import java.util.Map;
 
-public class JdbcConnection {
-    public static final String URL = "jdbc:mysql://localhost:3306/mydb?serverTimezone=UTC";
-    public static final String USER_NAME = "root";
-    public static final String PASSWORD = "root";
-    private static Connection connection;
+import static by.ngrudnitsky.util.ConnectionPool.*;
 
-    public static Connection getConnection() {
-        try {
-            if (connection == null || connection.isClosed()) {
-                connection = DriverManager.getConnection(URL, USER_NAME, PASSWORD);
-            }
-        } catch (SQLException e) {
-            /// TODO: 6/6/20
-            e.printStackTrace();
-        }
-        return connection;
-    }
-
-    public static void main(String[] args) throws SQLException {
-        JdbcConnection.reset();
+public class DatabaseInitializer {
+    public static void main(String[] args) throws ConnectionException {
+        String substring = "sub".substring(1,3);
+        System.out.println(substring);
+        //initConnectionPool();
+        //reset();
     }
 
     public static void reset() throws SQLException {
-        try (Connection connection = JdbcConnection.getConnection()) {
-            Statement statement = connection.createStatement();
-            statement.executeUpdate("DROP SCHEMA IF EXISTS `mydb` ;");
-            statement.executeUpdate("CREATE SCHEMA IF NOT EXISTS `mydb` DEFAULT CHARACTER SET utf8 ;");
-            createUsersTable(statement);
-            createRolesTable(statement);
-            createUsersHasRolesTable(statement);
-            createPostsTable(statement);
-            createCommentsTable(statement);
-            fillInRoles(statement);
-            fillInUsers(statement);
-            fillInPosts(statement);
-            fillInComments(statement);
-        }
+        Connection connection = getConnection();
+        Statement statement = connection.createStatement();
+        statement.executeUpdate("DROP SCHEMA IF EXISTS `mydb` ;");
+        statement.executeUpdate("CREATE SCHEMA IF NOT EXISTS `mydb` DEFAULT CHARACTER SET utf8 ;");
+        createUsersTable(statement);
+        createRolesTable(statement);
+        createUsersHasRolesTable(statement);
+        createPostsTable(statement);
+        createCommentsTable(statement);
+        fillInRoles(statement);
+        fillInUsers(statement);
+        fillInPosts(statement);
+        fillInComments(statement);
+        releaseConnection(connection);
     }
 
     private static void fillInComments(Statement statement) throws SQLException {
@@ -126,12 +117,12 @@ public class JdbcConnection {
     }
 
     private static void fillInPosts(Statement statement) throws SQLException {
-        statement.executeUpdate(String.format("INSERT INTO `mydb`.`posts` (`title`, `preview`, `content`, `status`, `users_id`, `createdAt`, `updatedAt`) VALUES ('%s', '%s', '%s', 'ACTIVE', '1', '2014-03-16 00:00:00.000', '2014-03-16 00:00:00.000');",TITLE1, PREVIEW1, CONTENT1));
-        statement.executeUpdate(String.format("INSERT INTO `mydb`.`posts` (`title`, `preview`, `content`, `status`, `users_id`, `createdAt`, `updatedAt`) VALUES ('%s', '%s', '%s', 'ACTIVE', '1', '2014-03-16 00:00:00.000', '2014-03-16 00:00:00.000');",TITLE2, PREVIEW2, CONTENT2));
-        statement.executeUpdate(String.format("INSERT INTO `mydb`.`posts` (`title`, `preview`, `content`, `status`, `users_id`, `createdAt`, `updatedAt`) VALUES ('%s', '%s', '%s', 'ACTIVE', '1', '2014-03-16 00:00:00.000', '2014-03-16 00:00:00.000');",TITLE3, PREVIEW3, CONTENT3));
-        statement.executeUpdate(String.format("INSERT INTO `mydb`.`posts` (`title`, `preview`, `content`, `status`, `users_id`, `createdAt`, `updatedAt`) VALUES ('%s', '%s', '%s', 'ACTIVE', '1', '2014-03-16 00:00:00.000', '2014-03-16 00:00:00.000');",TITLE4, PREVIEW4, CONTENT4));
-        statement.executeUpdate(String.format("INSERT INTO `mydb`.`posts` (`title`, `preview`, `content`, `status`, `users_id`, `createdAt`, `updatedAt`) VALUES ('%s', '%s', '%s', 'ACTIVE', '1', '2014-03-16 00:00:00.000', '2014-03-16 00:00:00.000');",TITLE5, PREVIEW5, CONTENT5));
-        statement.executeUpdate(String.format("INSERT INTO `mydb`.`posts` (`title`, `preview`, `content`, `status`, `users_id`, `createdAt`, `updatedAt`) VALUES ('%s', '%s', '%s', 'ACTIVE', '1', '2014-03-16 00:00:00.000', '2014-03-16 00:00:00.000');",TITLE6, PREVIEW6, CONTENT6));
+        statement.executeUpdate(String.format("INSERT INTO `mydb`.`posts` (`title`, `preview`, `content`, `status`, `users_id`, `createdAt`, `updatedAt`) VALUES ('%s', '%s', '%s', 'ACTIVE', '1', '2014-03-16 00:00:00.000', '2014-03-16 00:00:00.000');", TITLE1, PREVIEW1, CONTENT1));
+        statement.executeUpdate(String.format("INSERT INTO `mydb`.`posts` (`title`, `preview`, `content`, `status`, `users_id`, `createdAt`, `updatedAt`) VALUES ('%s', '%s', '%s', 'ACTIVE', '1', '2014-03-16 00:00:00.000', '2014-03-16 00:00:00.000');", TITLE2, PREVIEW2, CONTENT2));
+        statement.executeUpdate(String.format("INSERT INTO `mydb`.`posts` (`title`, `preview`, `content`, `status`, `users_id`, `createdAt`, `updatedAt`) VALUES ('%s', '%s', '%s', 'ACTIVE', '1', '2014-03-16 00:00:00.000', '2014-03-16 00:00:00.000');", TITLE3, PREVIEW3, CONTENT3));
+        statement.executeUpdate(String.format("INSERT INTO `mydb`.`posts` (`title`, `preview`, `content`, `status`, `users_id`, `createdAt`, `updatedAt`) VALUES ('%s', '%s', '%s', 'ACTIVE', '1', '2014-03-16 00:00:00.000', '2014-03-16 00:00:00.000');", TITLE4, PREVIEW4, CONTENT4));
+        statement.executeUpdate(String.format("INSERT INTO `mydb`.`posts` (`title`, `preview`, `content`, `status`, `users_id`, `createdAt`, `updatedAt`) VALUES ('%s', '%s', '%s', 'ACTIVE', '1', '2014-03-16 00:00:00.000', '2014-03-16 00:00:00.000');", TITLE5, PREVIEW5, CONTENT5));
+        statement.executeUpdate(String.format("INSERT INTO `mydb`.`posts` (`title`, `preview`, `content`, `status`, `users_id`, `createdAt`, `updatedAt`) VALUES ('%s', '%s', '%s', 'ACTIVE', '1', '2014-03-16 00:00:00.000', '2014-03-16 00:00:00.000');", TITLE6, PREVIEW6, CONTENT6));
     }
 
     private static final String TITLE1 = "Разработчик в США запустил сайт с приложениями из App Store, которые «не работают» — в поддержку почтового сервиса Hey";
